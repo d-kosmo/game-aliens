@@ -7,7 +7,7 @@ class Alien(Sprite):
                 super(Alien, self).__init__()
                 self.screen = screen
                 self.ai_settings = ai_settings
-                self.image = pygame.image.load('C:\Python32\game\image\\alien.bmp')
+                self.image = pygame.image.load('image\\alien.bmp')
                 self.rect = self.image.get_rect()
                 self.rect.x = self.rect.width
                 self.rect.y = self.rect.height
