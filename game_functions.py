@@ -3,20 +3,25 @@ import pygame
 from bullet import Bullet
 from alien import Alien
 from time import sleep
+import pyganim
 
-def check_keydown_events(event, ai_settings, screen, ship, bullets):
+def check_keydown_events(event, ai_settings, screen, ship, bullets, stats):
 	if event.key == pygame.K_RIGHT:
 		ship.moving_right = True
+		ship.stop = False
 	elif event.key == pygame.K_ESCAPE:
 		sys.exit()
 	elif event.key == pygame.K_LEFT:
 		ship.moving_left = True
-	elif event.key == pygame.K_UP:
-		ship.moving_up = True
-	elif event.key == pygame.K_DOWN:
-		ship.moving_down = True
+		ship.stop = False
+#	elif event.key == pygame.K_UP:
+#		ship.moving_up = True
+#	elif event.key == pygame.K_DOWN:
+#		ship.moving_down = True
 	elif event.key == pygame.K_SPACE:
 		fire_bullet(ai_settings,screen,ship,bullets)
+	elif event.key == pygame.K_p:
+                pause(stats)
 
 def fire_bullet(ai_settings,screen,ship,bullets):
 	if len(bullets) < ai_settings.bullets_allowed:
@@ -24,21 +29,23 @@ def fire_bullet(ai_settings,screen,ship,bullets):
 		bullets.add(new_bullet)
 
 def check_keyup_events(event,ship):
-	if event.key == pygame.K_RIGHT:
-		ship.moving_right = False
-	elif event.key == pygame.K_LEFT:
-		ship.moving_left = False
-	elif event.key == pygame.K_UP:
-		ship.moving_up = False
-	elif event.key == pygame.K_DOWN:
-		ship.moving_down = False
+        if event.key == pygame.K_RIGHT:
+                ship.moving_right = False
+                ship.stop = True
+        elif event.key == pygame.K_LEFT:
+                ship.moving_left = False
+                ship.stop = True
+#	elif event.key == pygame.K_UP:
+#		ship.moving_up = False
+#	elif event.key == pygame.K_DOWN:
+#		ship.moving_down = False
 
 def check_events(ai_settings,screen,stats,sb,play_button,ship,aliens,bullets):
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			sys.exit()
 		elif event.type == pygame.KEYDOWN:
-			check_keydown_events(event,ai_settings,screen,ship,bullets)
+			check_keydown_events(event,ai_settings,screen,ship,bullets,stats)
 		elif event.type == pygame.KEYUP:
 			check_keyup_events(event, ship)
 		elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -61,16 +68,24 @@ def check_play_button(ai_settings, screen, stats, sb, play_button, ship, aliens,
                 ship.center_ship()
                 ai_settings.initialize_dynamic_settings()
 
-def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_button):
-	screen.fill(ai_settings.bg_color)
-	for bullet in bullets.sprites():
-		bullet.draw_bullet()
-	ship.blitme()
-	aliens.draw(screen)
-	sb.show_score()
-	if not stats.game_active:
+def pause(stats):
+        if stats.game_active:
+                stats.game_active = False
+        else:
+                stats.game_active = True
+
+def update_screen(boltAnim,ai_settings, screen, stats, sb, ship, aliens, bullets, play_button):
+        screen.fill(ai_settings.bg_color)
+        boltAnim.blit(screen, (0, 0))
+        #screen.fill(ai_settings.bg_color)
+        for bullet in bullets.sprites():
+                bullet.draw_bullet()
+        ship.blitme()
+        aliens.draw(screen)
+        sb.show_score()
+        if not stats.game_active:
                 play_button.draw_button()
-	pygame.display.flip()
+        pygame.display.flip()
 	
 def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets):
         bullets.update()
@@ -101,7 +116,7 @@ def create_alien(ai_settings, screen, aliens, alien_number, row_number):
         alien = Alien(ai_settings, screen)
         alien_width = alien.rect.width
         alien.x = alien_width + 2 * alien_width * alien_number
-        alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
+        alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number + 20
         alien.rect.x = alien.x
         aliens.add(alien)
         
@@ -160,3 +175,4 @@ def check_high_score(stats, sb):
         if stats.score > stats.high_score:
                 stats.high_score = stats.score
                 sb.prep_high_score()
+
