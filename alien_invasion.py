@@ -25,11 +25,13 @@ def run_game():
         bullets = Group()
         aliens = Group()
         gf.create_fleet(ai_settings,screen,aliens,ship)
+        sound = pygame.mixer.Sound('sound\\laser.ogg')
+        sound_2 = pygame.mixer.Sound('sound\\explosion.ogg')
         while True:
-                gf.check_events(ai_settings,screen,stats,sb,play_button,ship,aliens,bullets)
+                gf.check_events(ai_settings,screen,stats,sb,play_button,ship,aliens,bullets,sound)
                 if stats.game_active:
                         ship.update(ai_settings)
-                        gf.update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets)
+                        gf.update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets, sound_2)
                         gf.update_aliens(ai_settings, stats, screen, sb, ship, aliens, bullets)
                 gf.update_screen(boltAnim,ai_settings, screen, stats, sb, ship, aliens, bullets, play_button)
                 #boltAnim.blit(screen, (100, 50))

@@ -5,7 +5,7 @@ from alien import Alien
 from time import sleep
 import pyganim
 
-def check_keydown_events(event, ai_settings, screen, ship, bullets, stats):
+def check_keydown_events(event, ai_settings, screen, ship, bullets, stats, sound):
 	if event.key == pygame.K_RIGHT:
 		ship.moving_right = True
 		ship.stop = False
@@ -20,6 +20,7 @@ def check_keydown_events(event, ai_settings, screen, ship, bullets, stats):
 #		ship.moving_down = True
 	elif event.key == pygame.K_SPACE:
 		fire_bullet(ai_settings,screen,ship,bullets)
+		sound.play()
 	elif event.key == pygame.K_p:
                 pause(stats)
 
@@ -40,12 +41,12 @@ def check_keyup_events(event,ship):
 #	elif event.key == pygame.K_DOWN:
 #		ship.moving_down = False
 
-def check_events(ai_settings,screen,stats,sb,play_button,ship,aliens,bullets):
+def check_events(ai_settings,screen,stats,sb,play_button,ship,aliens,bullets,sound):
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			sys.exit()
 		elif event.type == pygame.KEYDOWN:
-			check_keydown_events(event,ai_settings,screen,ship,bullets,stats)
+			check_keydown_events(event,ai_settings,screen,ship,bullets,stats,sound)
 		elif event.type == pygame.KEYUP:
 			check_keyup_events(event, ship)
 		elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -87,19 +88,21 @@ def update_screen(boltAnim,ai_settings, screen, stats, sb, ship, aliens, bullets
                 play_button.draw_button()
         pygame.display.flip()
 	
-def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets):
+def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets, sound_2):
         bullets.update()
         for bullet in bullets.copy():
                 if bullet.rect.bottom <= 0:
                         bullets.remove(bullet)
-        check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, bullets)
+        check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, bullets, sound_2)
                 
-def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, bullets):
+def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, bullets, sound_2):
         collisions = pygame.sprite.groupcollide(aliens, bullets, True, True)
         if collisions:
                 stats.score += ai_settings.alien_points
                 sb.prep_score()
                 check_high_score(stats, sb)
+                sound_2.play()
+                #Alien.boom(ai_settings)
         if len(aliens) == 0:
                 bullets.empty()
                 ai_settings.increase_speed()

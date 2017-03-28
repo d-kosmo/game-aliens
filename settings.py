@@ -58,7 +58,24 @@ class Settings():
                                 ('image//bg//1 (38).png', 0.1),
                                 ('image//bg//1 (39).png', 0.1),
                                 ('image//bg//1 (40).png', 0.1),]
-                                       
+                self.anim_boom = [('image//boom//boom0000.png', 0.1),
+                                  ('image//boom//boom0001.png', 0.1),
+                                  ('image//boom//boom0002.png', 0.1),
+                                  ('image//boom//boom0003.png', 0.1),
+                                  ('image//boom//boom0004.png', 0.1),
+                                  ('image//boom//boom0005.png', 0.1),
+                                  ('image//boom//boom0006.png', 0.1),
+                                  ('image//boom//boom0007.png', 0.1),
+                                  ('image//boom//boom0008.png', 0.1),
+                                  ('image//boom//boom0009.png', 0.1),
+                                  ('image//boom//boom0010.png', 0.1),
+                                  ('image//boom//boom0011.png', 0.1),
+                                  ('image//boom//boom0012.png', 0.1),
+                                  ('image//boom//boom0013.png', 0.1),
+                                  ('image//boom//boom0014.png', 0.1),
+                                  ('image//boom//boom0015.png', 0.1),
+                                  ('image//boom//boom0016.png', 0.1)]
+                                                                   
                 
         def initialize_dynamic_settings(self):
                 self.ship_speed_factor = 2.0
